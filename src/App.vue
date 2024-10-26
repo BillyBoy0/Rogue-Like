@@ -10,6 +10,7 @@
 
 import Machin from './classes/machin'
 import Projectile from './classes/projectile'
+import Enemy from './classes/enemy'
 
 export default {
     name: "cyrDav",
@@ -19,21 +20,27 @@ export default {
             time: 0,
             machin: new Machin(0, 0, 10, 100, 'red'),
             projectiles: [],
+            enemies: [],
             color: ["blue", "red", "green", "yellow", "pink", "orange"],
             width: 0,
             c: "",
         }
     },
     methods:{
+        spawnEnnemies(){
+            setInterval(() => {
+                this.enemies.push(new Enemy(this.machin, 10, 2, "blue"))
+            }, 1000)
+        },
         animate(){
             requestAnimationFrame(this.animate)
             this.c.clearRect(0, 0, this.canvas.width, this.canvas.height)
             this.machin.draw(this.c)
             this.time += 1
 
-            if (this.time == 2) {
+            if (this.time == 50) {
                 this.time = 0
-                
+
                 const projectile = new Projectile(this.machin.x, this.machin.y, 5, 2, "red")
                 this.projectiles.push(projectile)
 
@@ -43,6 +50,16 @@ export default {
             this.projectiles.forEach(projectile => {
                 projectile.update()
                 projectile.draw(this.c)
+            })
+
+            this.enemies.forEach((enemy, index, object) => {
+                enemy.update()
+                let text = false
+                if (this.time % 60 < 30) text = true
+                enemy.draw(this.c, text)
+                if ((Math.abs(enemy.x - this.machin.x) < this.machin.radius) && (Math.abs(enemy.y - this.machin.y) < this.machin.radius)){
+                    object.splice(index, 1);
+                }
             })
         },
         main(){
@@ -55,6 +72,7 @@ export default {
             this.machin.x =  this.canvas.width / 2
             this.machin.y = this.canvas.height / 2
 
+            this.spawnEnnemies()
             this.animate()
         }
     },

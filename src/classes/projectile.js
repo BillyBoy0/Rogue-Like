@@ -1,4 +1,4 @@
-export default class machin {
+export default class projectile {
     constructor(x, y, radius, velocity, color) {
       this.x = x;
       this.y = y;
