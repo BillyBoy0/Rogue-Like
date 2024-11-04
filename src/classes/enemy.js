@@ -1,5 +1,5 @@
 export default class enemy {
-    constructor(machin, radius, velocity, color) {
+    constructor(machin, text, radius, velocity, color) {
       if (Math.random() < 0.5){
         if (Math.random() < 0.5){
           this.x = machin.x * 2;
@@ -25,6 +25,7 @@ export default class enemy {
       this.radius = radius;
       this.velocity = velocity;
       this.color = color
+      this.text = text
     }
 
     draw(c, text) {
@@ -62,7 +63,7 @@ export default class enemy {
 
       if (text){
         c.font = "20px Arial"
-        c.fillText("Cc c'est moi monsieur larbin", this.x + 20, this.y)
+        c.fillText(this.text, this.x + 20, this.y)
       }
     }
     

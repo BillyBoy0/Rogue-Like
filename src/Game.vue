@@ -1,0 +1,110 @@
+<template>
+    <div id="main">
+        <canvas ref="monCanvas" height="800" width="800" id="gameBoard">
+            Désolé, votre navigateur ne prend pas en charge &lt;canvas&gt;.
+        </canvas>
+    </div>
+</template>
+
+<script>
+
+import Machin from './classes/machin'
+import Projectile from './classes/projectile'
+import Enemy from './classes/enemy'
+
+export default {
+    name: "cyrDav",
+    data: function ()  {
+        return {
+            canvas: null,
+            time: 0,
+            machin: new Machin(0, 0, 10, 100, 'red'),
+            projectiles: [],
+            enemies: [],
+            color: ["blue", "red", "green", "yellow", "pink", "orange"],
+            width: 0,
+            c: "",
+        }
+    },
+    methods:{
+        spawnEnnemies(){
+            setInterval(() => {
+                let rd = Math.random()
+                if (rd < 0.33) this.enemies.push(new Enemy(this.machin, "Bonjour c'est moi monsieur larbin", 10, 2, "skyblue"))
+                else if (rd <0.66) this.enemies.push(new Enemy(this.machin, "Que puis je faire pour vous?", 10, 2, "skyblue"))
+                else this.enemies.push(new Enemy(this.machin, "A vot' service", 10, 2, "skyblue"))
+            }, 1000)
+        },
+        animate(){
+            requestAnimationFrame(this.animate)
+            this.c.clearRect(0, 0, this.canvas.width, this.canvas.height)
+            this.machin.draw(this.c)
+            this.time += 1
+
+            if (this.time == 50) {
+                this.time = 0
+
+                const projectile = new Projectile(this.machin.x, this.machin.y, 5, 2, "red")
+                this.projectiles.push(projectile)
+
+                if (this.projectiles.length == 200) this.projectiles.shift()
+            }
+
+            this.projectiles.forEach(projectile => {
+                projectile.update()
+                projectile.draw(this.c)
+            })
+
+            this.enemies.forEach((enemy, index, object) => {
+                enemy.update()
+                let text = false
+                if (this.time % 60 < 30) text = true
+                enemy.draw(this.c, text)
+                if ((Math.abs(enemy.x - this.machin.x) < this.machin.radius) && (Math.abs(enemy.y - this.machin.y) < this.machin.radius)){
+                    object.splice(index, 1);
+                }
+            })
+        },
+        main(){
+            this.canvas = this.$refs.monCanvas;
+            this.c = this.canvas.getContext('2d')
+            
+            this.canvas.height = document.getElementById("main").clientHeight
+            this.canvas.width = document.getElementById("main").clientHeight
+
+            this.machin.x =  this.canvas.width / 2
+            this.machin.y = this.canvas.height / 2
+
+            this.spawnEnnemies()
+            this.animate()
+        }
+    },
+    mounted() {
+        this.main()
+    }
+}
+</script>
+
+<style>
+
+body{
+    margin: 0;
+}
+
+html, body, #app{
+    height: 100%;
+    width: 100%;
+}
+
+#main{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#gameBoard {
+    align-self: center;
+    background-color: #111;
+}
+</style>
