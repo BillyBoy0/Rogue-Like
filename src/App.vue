@@ -38,7 +38,7 @@ export default {
             this.machin.draw(this.c)
             this.time += 1
 
-            if (this.time == 50) {
+            if (this.time == 20) {
                 this.time = 0
 
                 const projectile = new Projectile(this.machin.x, this.machin.y, 5, 2, "red")
@@ -60,6 +60,14 @@ export default {
                 if ((Math.abs(enemy.x - this.machin.x) < this.machin.radius) && (Math.abs(enemy.y - this.machin.y) < this.machin.radius)){
                     object.splice(index, 1);
                 }
+
+                this.projectiles.forEach((proj, indexProj) => {
+                    const dist = Math.hypot(proj.x - enemy.x, proj.y - enemy.y)
+                    if (dist - enemy.radius - proj.radius < 1) {
+                        this.enemies.splice(index, 1)
+                        this.projectiles.splice(indexProj, 1)
+                    }
+                })
             })
         },
         main(){
