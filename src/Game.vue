@@ -7,7 +7,6 @@
 </template>
 
 <script>
-
 import Machin from './classes/machin'
 import Projectile from './classes/projectile'
 import Enemy from './classes/enemy'
@@ -29,10 +28,7 @@ export default {
     methods:{
         spawnEnnemies(){
             setInterval(() => {
-                let rd = Math.random()
-                if (rd < 0.33) this.enemies.push(new Enemy(this.machin, "Bonjour c'est moi monsieur larbin", 10, 2, "skyblue"))
-                else if (rd <0.66) this.enemies.push(new Enemy(this.machin, "Que puis je faire pour vous?", 10, 2, "skyblue"))
-                else this.enemies.push(new Enemy(this.machin, "A vot' service", 10, 2, "skyblue"))
+                this.enemies.push(new Enemy(this.machin, "cc", 10, 2, "blue"))
             }, 1000)
         },
         animate(){
@@ -41,10 +37,14 @@ export default {
             this.machin.draw(this.c)
             this.time += 1
 
-            if (this.time == 50) {
+            if (this.time == 20) {
                 this.time = 0
 
-                const projectile = new Projectile(this.machin.x, this.machin.y, 5, 2, "red")
+                let angle
+                if (this.enemies.length == 0) angle = 0
+                else angle = (this.enemies[0].angle + Math.PI) + ((Math.random() * 0.2) - 0.2)
+
+                const projectile = new Projectile(this.machin.x, this.machin.y, 5, 2, "red", angle)
                 this.projectiles.push(projectile)
 
                 if (this.projectiles.length == 200) this.projectiles.shift()
@@ -63,6 +63,14 @@ export default {
                 if ((Math.abs(enemy.x - this.machin.x) < this.machin.radius) && (Math.abs(enemy.y - this.machin.y) < this.machin.radius)){
                     object.splice(index, 1);
                 }
+
+                this.projectiles.forEach((proj, indexProj) => {
+                    const dist = Math.hypot(proj.x - enemy.x, proj.y - enemy.y)
+                    if (dist - enemy.radius - proj.radius < 1) {
+                        this.enemies.splice(index, 1)
+                        this.projectiles.splice(indexProj, 1)
+                    }
+                })
             })
         },
         main(){
