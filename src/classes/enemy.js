@@ -70,6 +70,5 @@ export default class enemy {
     update() {
       this.x += this.dx * this.velocity;
       this.y += this.dy * this.velocity;
-      console.log(this.velocity)
     }
 }

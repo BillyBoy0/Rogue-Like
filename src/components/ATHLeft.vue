@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="mainATHLeft">
         aaa
     </div>
 </template>
@@ -11,3 +11,14 @@ export default{
 }
 
 </script>
+
+<style>
+
+#mainATHLeft{
+    background-color: yellow;
+    height: 100%;
+    width: 100%;
+}
+
+
+</style>

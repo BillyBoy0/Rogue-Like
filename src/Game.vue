@@ -1,18 +1,26 @@
 <template>
     <div id="main">
+        <ATHLeft></ATHLeft>
         <canvas ref="monCanvas" height="800" width="800" id="gameBoard">
             Désolé, votre navigateur ne prend pas en charge &lt;canvas&gt;.
         </canvas>
+        <ATHRight></ATHRight>
     </div>
 </template>
 
 <script>
+import ATHLeft from './components/ATHLeft.vue';
+import ATHRight from './components/ATHRight.vue';
 import Machin from './classes/machin'
 import Projectile from './classes/projectile'
 import Enemy from './classes/enemy'
 
 export default {
     name: "cyrDav",
+    components: {
+        ATHLeft,
+        ATHRight
+    },
     data: function ()  {
         return {
             canvas: null,
@@ -29,7 +37,7 @@ export default {
         spawnEnnemies(){
             setInterval(() => {
                 this.enemies.push(new Enemy(this.machin, "cc", 10, 2, "blue"))
-            }, 1000)
+            }, 50)
         },
         animate(){
             requestAnimationFrame(this.animate)
@@ -37,14 +45,14 @@ export default {
             this.machin.draw(this.c)
             this.time += 1
 
-            if (this.time == 20) {
+            if (this.time == 1) {
                 this.time = 0
 
                 let angle
                 if (this.enemies.length == 0) angle = 0
                 else angle = (this.enemies[0].angle + Math.PI) + ((Math.random() * 0.2) - 0.2)
 
-                const projectile = new Projectile(this.machin.x, this.machin.y, 5, 2, "red", angle)
+                const projectile = new Projectile(this.machin.x, this.machin.y, 2, 2, "red", angle)
                 this.projectiles.push(projectile)
 
                 if (this.projectiles.length == 200) this.projectiles.shift()
@@ -114,5 +122,6 @@ html, body, #app{
 #gameBoard {
     align-self: center;
     background-color: #111;
+    height: 100%;
 }
 </style>
