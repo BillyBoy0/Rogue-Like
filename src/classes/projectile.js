@@ -1,8 +1,8 @@
 export default class projectile {
-    constructor(x, y, radius, velocity, color) {
+    constructor(x, y, radius, velocity, color, angle) {
       this.x = x;
       this.y = y;
-      this.angle = Math.random() * 2 * Math.PI
+      this.angle = angle
       this.dx = Math.cos(this.angle)
       this.dy = Math.sin(this.angle)
       this.radius = radius;

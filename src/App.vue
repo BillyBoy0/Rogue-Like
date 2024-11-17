@@ -40,8 +40,14 @@ export default {
 
             if (this.time == 20) {
                 this.time = 0
+                console.log(this.enemies)
+                console.log(this.enemies[0])
 
-                const projectile = new Projectile(this.machin.x, this.machin.y, 5, 2, "red")
+                let angle
+                if (this.enemies.length == 0) angle = 0
+                else angle = (this.enemies[0].angle + Math.PI) + ((Math.random() * 0.2) - 0.2)
+
+                const projectile = new Projectile(this.machin.x, this.machin.y, 5, 2, "red", angle)
                 this.projectiles.push(projectile)
 
                 if (this.projectiles.length == 200) this.projectiles.shift()
